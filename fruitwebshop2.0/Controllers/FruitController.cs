@@ -22,5 +22,59 @@ namespace fruitwebshop2._0.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost]
+
+        public IActionResult Post(Fruit fruit)
+        {
+            var context = new FruitwebshopContext();
+            try
+            {
+                context.Add(fruit);
+                context.SaveChanges();
+                return StatusCode(StatusCodes.Status200OK, "Sikeres adattárolás");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
+        }
+
+        [HttpPut]
+
+        public IActionResult Put(Fruit fruit)
+        {
+            var context = new FruitwebshopContext();
+            try
+            {
+                context.Update(fruit);
+                context.SaveChanges();
+                return StatusCode(StatusCodes.Status200OK, "Sikeres módosítás.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+
+        public IActionResult Delete(int id)
+        {
+            var context = new FruitwebshopContext();
+            try
+            {
+                Fruit fruit = new Fruit();
+                fruit.FruitId = id;
+                context.Remove(fruit);
+                context.SaveChanges();
+                return StatusCode(StatusCodes.Status200OK, "Sikeres törlés.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
+        }
+
     }
 }
