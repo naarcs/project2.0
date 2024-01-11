@@ -1,5 +1,6 @@
 ﻿using fruitwebshop2._0.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace fruitwebshop2._0.Controllers
@@ -23,6 +24,28 @@ namespace fruitwebshop2._0.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+
+        public IActionResult GetId(int id)
+        {
+            var context = new FruitwebshopContext();
+            try
+            {
+                var response = context.Fruits.FirstOrDefault(f => f.FruitId == id);
+                if (response == null)
+                {
+                    return BadRequest("Nincs ilyen gyümölcs.");
+                }
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Nincs ilyen gyümi");
+            }
+            
+        }
+
+
         [HttpPost]
 
         public IActionResult Post(Fruit fruit)
@@ -40,6 +63,7 @@ namespace fruitwebshop2._0.Controllers
             }
         }
 
+
         [HttpPut]
 
         public IActionResult Put(Fruit fruit)
@@ -56,6 +80,7 @@ namespace fruitwebshop2._0.Controllers
                 return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
             }
         }
+
 
         [HttpDelete("{id}")]
 
