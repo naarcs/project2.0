@@ -1,22 +1,20 @@
 ﻿using fruitwebshop2._0.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace fruitwebshop2._0.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class OrderitemController : ControllerBase
     {
         [HttpGet]
-
         public IActionResult Get()
         {
             var context = new FruitwebshopContext();
             try
             {
-                return Ok(context.Users.Include(f => f.Order).Include(f => f.Order.Orderitems).ToList());
+                return Ok(context.Orderitems.ToList());
             }
             catch (Exception ex)
             {
@@ -24,17 +22,16 @@ namespace fruitwebshop2._0.Controllers
             }
         }
 
-
         [HttpGet("{id}")]
         public IActionResult GetId(int id)
         {
             var context = new FruitwebshopContext();
             try
             {
-                var response = context.Users.FirstOrDefault(f => f.UserId == id);
+                var response = context.Orderitems.FirstOrDefault(f => f.OrderItemId == id);
                 if (response == null)
                 {
-                    return BadRequest("Nincs ilyen felhasználó.");
+                    return BadRequest("Nincs ilyen rendelés tétel.");
                 }
                 return Ok(response);
             }
@@ -44,16 +41,13 @@ namespace fruitwebshop2._0.Controllers
             }
         }
 
-
-
         [HttpPost]
-
-        public IActionResult Post(User user)
+        public IActionResult Post(Orderitem orderItem)
         {
             var context = new FruitwebshopContext();
             try
             {
-                context.Add(user);
+                context.Add(orderItem);
                 context.SaveChanges();
                 return StatusCode(StatusCodes.Status200OK, "Sikeres adattárolás");
             }
@@ -63,15 +57,13 @@ namespace fruitwebshop2._0.Controllers
             }
         }
 
-
         [HttpPut]
-
-        public IActionResult Put(User user)
+        public IActionResult Put(Orderitem orderItem)
         {
             var context = new FruitwebshopContext();
             try
             {
-                context.Update(user);
+                context.Update(orderItem);
                 context.SaveChanges();
                 return StatusCode(StatusCodes.Status200OK, "Sikeres módosítás.");
             }
@@ -81,17 +73,15 @@ namespace fruitwebshop2._0.Controllers
             }
         }
 
-
         [HttpDelete("{id}")]
-
         public IActionResult Delete(int id)
         {
             var context = new FruitwebshopContext();
             try
             {
-                User user = new User();
-                user.UserId = id;
-                context.Remove(user);
+                Orderitem orderItem = new Orderitem();
+                orderItem.OrderItemId = id;
+                context.Remove(orderItem);
                 context.SaveChanges();
                 return StatusCode(StatusCodes.Status200OK, "Sikeres törlés.");
             }
