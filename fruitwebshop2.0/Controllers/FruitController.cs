@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace fruitwebshop2._0.Controllers
 {
@@ -11,12 +12,15 @@ namespace fruitwebshop2._0.Controllers
     {
         [HttpGet]
 
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var context = new FruitwebshopContext();
             try
             {
-                return Ok(context.Fruits.ToList());
+                using (var context = new FruitwebshopContext())
+                {
+                    var fruits = await context.Fruits.ToListAsync();
+                    return Ok(fruits);
+                }
             }
             catch (Exception ex)
             {
